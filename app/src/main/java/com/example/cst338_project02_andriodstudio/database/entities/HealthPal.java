@@ -101,4 +101,3 @@ public class HealthPal {
         this.userId = userId;
     }
 }
-

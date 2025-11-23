@@ -35,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private HealthPalRepository repository;
     public static final String TAG = "SEC_HEALTH_PAL";
+
+    //REMOVE
     String mExercise = "";
     double mWeight = 0.0;
     int mReps = 0;
+
     private int loggedInUserId = -1;
     private User user;
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //REMOVE?
         binding.exerciseInputEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
