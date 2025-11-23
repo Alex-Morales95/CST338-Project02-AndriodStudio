@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private HealthPalRepository repository;
     public static final String TAG = "SEC_HEALTH_PAL";
 
-    //REMOVE
+    //REplace
     String mExercise = "";
     double mWeight = 0.0;
     int mReps = 0;
