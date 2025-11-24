@@ -50,26 +50,28 @@ public class MainActivity extends AppCompatActivity {
         loginUser(savedInstanceState);
 
         if(loggedInUserId == -1){
-            Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
-            startActivity(intent);
+            Intent i = LoginActivity.loginIntentFactory(getApplicationContext());
+            startActivity(i);
+            finish();
+            return;
         }
 
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
-        updateDisplay();
+
 
         binding.logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getInformationFromDisplay();
                 insertHealthPalRecord();
-                updateDisplay();
+
             }
         });
 
         binding.weightInputEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDisplay();
+
             }
         });
     }
@@ -104,10 +106,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@Nullable Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY,
-                Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
-        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, loggedInUserId);
         sharedPrefEditor.apply();
     }
 
@@ -159,13 +160,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
-        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY,LOGGED_OUT);
-        sharedPrefEditor.apply();
-        getIntent().putExtra(MAIN_ACTIVITY_USER_ID,LOGGED_OUT);
-        startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+        SharedPreferences sp = getApplicationContext()
+                .getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        sp.edit().remove(SHARED_PREFERENCE_USERID_VALUE).apply();
+
+        getIntent().removeExtra(MAIN_ACTIVITY_USER_ID);
+
+        loggedInUserId = -1;
+        user = null;
+
+        Intent i = LoginActivity.loginIntentFactory(getApplicationContext());
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
     }
+
+    public void onLogoutClick(View view) {
+        logout();
+    }
+
 
     static Intent mainActivityIntentFactory(Context context, int userId){
         Intent intent = new Intent(context, MainActivity.class);
@@ -180,17 +193,20 @@ public class MainActivity extends AppCompatActivity {
         HealthPal log = new HealthPal(mExercise,mActivity,mHeight,loggedInUserId);
         repository.insertHealthPal(log);
     }
-    private void updateDisplay(){
-        ArrayList<HealthPal> allLogs = repository.getAllLogsByUserId(loggedInUserId);
-        if(allLogs.isEmpty()){
-            binding.logDisplayTextView.setText(R.string.nothing_to_show_time_to_hit_the_gym);
-        }
-        StringBuilder sb = new StringBuilder();
-        for(HealthPal log : allLogs){
-            sb.append(log);
-        }
-        binding.logDisplayTextView.setText(sb.toString());
+    private void observeUserLogs() {
+        repository.getAllLogsByUserIdLive(loggedInUserId).observe(this, logs -> {
+            if (logs == null || logs.isEmpty()) {
+                binding.logDisplayTextView.setText(R.string.nothing_to_show_time_to_hit_the_gym);
+                return;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (HealthPal log : logs) {
+                sb.append(log.toString());
+            }
+            binding.logDisplayTextView.setText(sb.toString());
+        });
     }
+
     private void getInformationFromDisplay(){
         mExercise = binding.weightInputEditText.getText().toString();
         try {

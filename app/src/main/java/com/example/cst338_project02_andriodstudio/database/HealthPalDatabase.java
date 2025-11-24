@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {HealthPal.class, User.class}, version = 1, exportSchema = false)
+@Database(entities = {HealthPal.class, User.class}, version = 5, exportSchema = false)
 public abstract class HealthPalDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";
@@ -54,7 +54,8 @@ public abstract class HealthPalDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(
                                     context.getApplicationContext(),
                                     HealthPalDatabase.class, DATABASE_NAME)
-                            .fallbackToDestructiveMigration()  // wipes and rebuilds DB when version changes
+                            .fallbackToDestructiveMigration()
+                            .addCallback(addDefaultValues)
                             .build();
                 }
             }

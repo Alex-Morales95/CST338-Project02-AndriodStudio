@@ -19,7 +19,6 @@ import java.util.concurrent.Future;
 public class HealthPalRepository {
     private final HealthPalDAO healthPalDAO;
     private final UserDAO userDAO;
-    private ArrayList<HealthPal> allLogs;
 
     private static HealthPalRepository repository;
 
@@ -27,27 +26,17 @@ public class HealthPalRepository {
         HealthPalDatabase db = HealthPalDatabase.getInstance(application);
         this.healthPalDAO = db.healthPalDAO();
         this.userDAO = db.userDAO();
-        this.allLogs = (ArrayList<HealthPal>) this.healthPalDAO.getAllRecords();
     }
 
-    public static HealthPalRepository getRepository(Application application) {
-        if(repository != null){
-            return repository;
+    public LiveData<List<HealthPal>> getAllLogsByUserIdLive(int userId) {
+        return healthPalDAO.getAllLogsByUserId(userId);
+    }
+
+    public static synchronized HealthPalRepository getRepository(Application application) {
+        if (repository == null) {
+            repository = new HealthPalRepository(application);
         }
-        Future<HealthPalRepository> future = HealthPalDatabase.databaseWriteExecutor.submit(
-                new Callable<HealthPalRepository>() {
-                    @Override
-                    public HealthPalRepository call() throws Exception {
-                        return new HealthPalRepository(application);
-                    }
-                }
-        );
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e){
-            Log.d(MainActivity.TAG, "Problem getting HealthPalRepository, thread error.");
-        }
-        return null;
+        return repository;
     }
 
     public ArrayList<HealthPal> getAllLogs(){

@@ -33,6 +33,23 @@ public class LoginActivity extends AppCompatActivity {
                 verifyUser();
             }
         });
+
+        binding.createAccountButton.setOnClickListener(v -> {
+            String username = binding.userNameLoginEditText.getText().toString().trim();
+            String password = binding.passwordLoginEditText.getText().toString().trim();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Enter a username and password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            User newUser = new User(username, password);
+            repository.insertUser(newUser);
+            Toast.makeText(this, "Account created! You can now log in.", Toast.LENGTH_SHORT).show();
+
+            binding.userNameLoginEditText.setText("");
+            binding.passwordLoginEditText.setText("");
+        });
     }
 
     private void verifyUser(){
@@ -45,8 +62,13 @@ public class LoginActivity extends AppCompatActivity {
         userObserver.observe(this, user -> {
             if(user != null){
                 String password = binding.passwordLoginEditText.getText().toString();
-                if(password.equals(user.getPassword())){
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(),user.getId()));
+                if (password.equals(user.getPassword())) {
+                    SharedPreferences sp = getApplicationContext()
+                            .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
+                    sp.edit().putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, user.getId()).apply();
+
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                    finish();
                 }else{
                     ToastMaker("Invalid password");
                     binding.passwordLoginEditText.setSelection(0);
