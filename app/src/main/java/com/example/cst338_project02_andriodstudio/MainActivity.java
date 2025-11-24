@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private HealthPalRepository repository;
     public static final String TAG = "SEC_HEALTH_PAL";
     String mExercise = "";
-    double mWeight = 0.0;
-    int mReps = 0;
+    double mActivity = 0.0;
+    int mHeight = 0;
     private int loggedInUserId = -1;
     private User user;
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.exerciseInputEditText.setOnClickListener(new View.OnClickListener() {
+        binding.weightInputEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateDisplay();
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         if(mExercise.isEmpty()){
             return;
         }
-        HealthPal log = new HealthPal(mExercise,mWeight,mReps,loggedInUserId);
+        HealthPal log = new HealthPal(mExercise,mActivity,mHeight,loggedInUserId);
         repository.insertHealthPal(log);
     }
     private void updateDisplay(){
@@ -192,16 +192,16 @@ public class MainActivity extends AppCompatActivity {
         binding.logDisplayTextView.setText(sb.toString());
     }
     private void getInformationFromDisplay(){
-        mExercise = binding.exerciseInputEditText.getText().toString();
+        mExercise = binding.weightInputEditText.getText().toString();
         try {
-            mWeight = Double.parseDouble(binding.weightInputEditText.getText().toString());
+            mActivity = Double.parseDouble(binding.activityInputEditText.getText().toString());
         }catch (NumberFormatException e){
             Log.d("SEC_HEALTH_PAL", "Error reading value from Weight edit text.");
         }
 
-        //mReps = binding.repInputEditText.getText().toString();
+        //mHeight = binding.repInputEditText.getText().toString();
         try {
-            mReps = Integer.parseInt(binding.repInputEditText.getText().toString());
+            mHeight = Integer.parseInt(binding.heightInputEditText.getText().toString());
         }catch (NumberFormatException e){
             Log.d("SEC_HEALTH_PAL", "Error reading value from Reps edit text.");
         }

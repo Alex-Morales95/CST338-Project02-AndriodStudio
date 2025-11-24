@@ -1,6 +1,7 @@
 package com.example.cst338_project02_andriodstudio.database.entities;
 
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -14,29 +15,35 @@ public class HealthPal {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String exercise;
+    @ColumnInfo(name = "weightGoal")
+    private String weightGoal;
 
-    private double weight;
+    @ColumnInfo(name = "activityLevel")
+    private double activityLevel;
 
-    private int reps;
+    @ColumnInfo(name = "height")
+    private int height;
 
+//    @ColumnInfo(name = "date")
     private LocalDateTime date;
 
     private int userId;
 
-    public HealthPal(String exercise, double weight, int reps, int userId) {
-        this.exercise = exercise;
-        this.weight = weight;
-        this.reps = reps;
+    public HealthPal(){}
+
+    public HealthPal(String weight, double activity, int height, int userId) {
+        this.weightGoal = weight;
+        this.activityLevel = activity;
+        this.height = height;
         this.userId = userId;
         date = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
-        return exercise + '\n' +
-                "weight: " + weight + '\n' +
-                "Height: " + reps + '\n' +
+        return   weightGoal + '\n' +
+                "activityLevel: " + activityLevel + '\n' +
+                "Height: " + height + '\n' +
                 "date: " + date.toString() + '\n' +
                 "+ + + + + + + +\n";
     }
@@ -45,13 +52,15 @@ public class HealthPal {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         HealthPal healthPal = (HealthPal) o;
-        return id == healthPal.id && Double.compare(weight, healthPal.weight) == 0 && reps == healthPal.reps && userId == healthPal.userId && Objects.equals(exercise, healthPal.exercise) && Objects.equals(date, healthPal.date);
+        return id == healthPal.id && Double.compare(activityLevel, healthPal.activityLevel) == 0 && height == healthPal.height && userId == healthPal.userId && Objects.equals(weightGoal, healthPal.weightGoal) && Objects.equals(date, healthPal.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, exercise, weight, reps, date, userId);
+        return Objects.hash(id, weightGoal, activityLevel, height, date, userId);
     }
+
+    //TODO: figure out how to get these methods to work, seems like its lot fo work
 
     public int getId() {
         return id;
@@ -61,28 +70,28 @@ public class HealthPal {
         this.id = id;
     }
 
-    public String getExercise() {
-        return exercise;
+    public String getWeightGoal() {
+        return weightGoal;
     }
 
-    public void setExercise(String exercise) {
-        this.exercise = exercise;
+    public void setWeightGoal(String weight) {
+        this.weightGoal = weight;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getActivityLevel() {
+        return activityLevel;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setActivityLevel(double activity) {
+        this.activityLevel = activity ;
     }
 
-    public int getReps() {
-        return reps;
+    public int getHeight() {
+        return height;
     }
 
-    public void setReps(int reps) {
-        this.reps = reps;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public LocalDateTime getDate() {

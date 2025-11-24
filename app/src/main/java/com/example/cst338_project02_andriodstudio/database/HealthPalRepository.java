@@ -24,7 +24,7 @@ public class HealthPalRepository {
     private static HealthPalRepository repository;
 
     private HealthPalRepository(Application application){
-        HealthPalDatabase db = HealthPalDatabase.getDatabase(application);
+        HealthPalDatabase db = HealthPalDatabase.getInstance(application);
         this.healthPalDAO = db.healthPalDAO();
         this.userDAO = db.userDAO();
         this.allLogs = (ArrayList<HealthPal>) this.healthPalDAO.getAllRecords();

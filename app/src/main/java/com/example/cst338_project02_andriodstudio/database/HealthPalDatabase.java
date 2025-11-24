@@ -47,6 +47,22 @@ public abstract class HealthPalDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    public static HealthPalDatabase getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (HealthPalDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(
+                                    context.getApplicationContext(),
+                                    HealthPalDatabase.class, DATABASE_NAME)
+                            .fallbackToDestructiveMigration()  // wipes and rebuilds DB when version changes
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+
     private static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db){
