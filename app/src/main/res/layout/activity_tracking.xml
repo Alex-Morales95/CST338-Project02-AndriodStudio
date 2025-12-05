@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/proteinGoal"
+            android:layout_width="390dp"
+            android:layout_height="167dp"
+            android:layout_marginTop="16dip"
+            android:padding="8dp"
+            android:text="Lets get tracking!"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/weightLabelTextView"
+            android:layout_width="309dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Protein:"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logDisplayTextView" />
+
+        <EditText
+            android:id="@+id/proteinInputEditText"
+            android:layout_width="298dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:hint="Input Protein Intake"
+            android:inputType="textAutoComplete"
+            android:padding="8dp"
+
+            app:layout_constraintStart_toEndOf="@+id/weightLabelTextView"
+            app:layout_constraintTop_toBottomOf="@id/logDisplayTextView" />
+
+        <TextView
+            android:id="@+id/activityLabelTextView"
+            android:layout_width="311dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dip"
+            android:layout_marginTop="8dp"
+            android:text="Carbs:"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weightLabelTextView" />
+
+        <EditText
+            android:id="@+id/activityInputEditText"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:hint="Input Carb Intake"
+            android:inputType="number|numberDecimal"
+            android:padding="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/activityLabelTextView"
+            app:layout_constraintStart_toEndOf="@+id/activityLabelTextView" />
+
+        <TextView
+            android:id="@+id/heightLabelTextView"
+            android:layout_width="306dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dip"
+            android:layout_marginTop="8dp"
+            android:text="Fat:"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CarbsLabelTextView" />
+
+        <EditText
+            android:id="@+id/FatInputEditText"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:inputType="number"
+            android:padding="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/CarbsLabelTextView"
+            app:layout_constraintStart_toEndOf="@+id/CarbsLabelTextView"
+            android:hint="Input Fat Intake"/>
+
+        <TextView
+            android:id="@+id/CalorieLabelTextView"
+            android:layout_width="305dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dip"
+            android:layout_marginTop="8dp"
+            android:text="Calories:"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <EditText
+            android:id="@+id/CalorieInputEditText"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:hint="Input Calorie Intake"
+            android:inputType="number"
+            android:padding="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/CalorieLabelTextView"
+            app:layout_constraintStart_toEndOf="@+id/CalorieLabelTextView" />
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="85dip"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CaloriesInputEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:text="Update Tracking Log"
+            android:textSize="21sp"
+            android:id="@+id/UpdateTrackingLogButton" />
+
+        <Button
+            android:id="@+id/StepsButton"
+            android:layout_width="180dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Step Tracker" />
+
+
+    </LinearLayout>
+</ScrollView>
