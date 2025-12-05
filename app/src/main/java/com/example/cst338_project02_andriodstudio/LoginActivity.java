@@ -52,30 +52,34 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void verifyUser(){
-        String username = binding.userNameLoginEditText.getText().toString();
-        if(username.isEmpty()){
+    private void verifyUser() {
+        String username = binding.userNameLoginEditText.getText().toString().trim();
+        if (username.isEmpty()) {
             ToastMaker("Username should not be blank");
             return;
         }
-        LiveData<User> userObserver = repository.getUserByUserName(username);
-        userObserver.observe(this, user -> {
-            if(user != null){
-                String password = binding.passwordLoginEditText.getText().toString();
-                if (password.equals(user.getPassword())) {
-                    SharedPreferences sp = getApplicationContext()
-                            .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
-                    sp.edit().putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, user.getId()).apply();
 
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
-                    finish();
-                }else{
-                    ToastMaker("Invalid password");
-                    binding.passwordLoginEditText.setSelection(0);
-                }
-            }else{
-                ToastMaker(String.format("%s is not a valid username", username));
+        LiveData<User> live = repository.getUserByUserName(username);
+        live.observe(this, user -> {
+            live.removeObservers(this);
+
+            if (user == null) {
+                ToastMaker(username + " is not a valid username");
                 binding.userNameLoginEditText.setSelection(0);
+                return;
+            }
+
+            String password = binding.passwordLoginEditText.getText().toString();
+            if (password.equals(user.getPassword())) {
+                SharedPreferences sp = getApplicationContext()
+                        .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
+                sp.edit().putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, user.getId()).apply();
+
+                startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                finish();
+            } else {
+                ToastMaker("Invalid password");
+                binding.passwordLoginEditText.setSelection(0);
             }
         });
     }
