@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CST338-Project02-AndriodStudio</string>
+    <string name="enter_weight_goal"> Lose,Maintain or Gain</string>
+    <string name="activity">What is your Activity Level</string>
+    <string name="enter_activity_level">Enter: Low(1.0)/Average(5.0)/High(10.0))</string>
+    <string name="enter_height">Enter height</string>
+    <string name="height">height</string>
+    <string name="log">Submit</string>
+    <string name="nothing_to_show_time_to_hit_the_gym">Nothing to show, time to put that work in!</string>
+    <string name="login_welcome">Welcome to HealthPal! \nPlease sign in.</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login!</string>
+    <string name="logout">Logout</string>
+    <string name="create_an_account">Create an account</string>
 </resources>
