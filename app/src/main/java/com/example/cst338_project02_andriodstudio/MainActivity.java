@@ -3,6 +3,7 @@ package com.example.cst338_project02_andriodstudio;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.Button;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -47,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = com.example.cst338_project02_andriodstudio.databinding.ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Button stepCounterButton = findViewById(R.id.stepCounterButton);
+        stepCounterButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, StepCounterActivity.class);
+        });
+
         repository = HealthPalRepository.getRepository(getApplication());
         loginUser(savedInstanceState);
 
