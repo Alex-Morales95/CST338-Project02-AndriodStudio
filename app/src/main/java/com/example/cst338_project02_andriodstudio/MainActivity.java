@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             if (this.user != null) {
                 invalidateOptionsMenu();
             } else {
-                //logout();
+
             }
         });
     }
@@ -158,45 +158,11 @@ public class MainActivity extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                //loseshowLogoutDialog();
                 return false;
             }
         });
         return true;
     }
-/*
-    private void showLogoutDialog() {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
-        final AlertDialog alertDialog = alertBuilder.create();
-
-        alertBuilder.setMessage("Logout?");
-        alertBuilder.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                logout();
-            }
-        });
-
-        alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-
-        alertBuilder.create().show();
-    }
-
-    private void logout() {
-        SharedPreferences sp = getApplicationContext()
-                .getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
-        sp.edit().remove(SHARED_PREFERENCE_USERID_VALUE).apply();
-
-        getIntent().removeExtra(MAIN_ACTIVITY_USER_ID);
-
-        loggedInUserId = -1;
-   */
-
 
     static Intent mainActivityIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, MainActivity.class);
