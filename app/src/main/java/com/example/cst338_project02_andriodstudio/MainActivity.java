@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
 
+
         binding.logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        binding.addUserButton.setOnClickListener(v -> handleAddUser());
+        binding.removeUserButton.setOnClickListener(v -> handleRemoveUser());
+//        binding.viewUserLogsButton.setOnClickListener(v -> handleViewUserLogs());
     }
+
+
 
     private void loginUser(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY,
@@ -94,9 +101,17 @@ public class MainActivity extends AppCompatActivity {
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
         userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null){
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            }else{
+                if (this.user.isAdmin()) {
+                    binding.adminControlsLayout.setVisibility(View.VISIBLE);
+                    binding.userContentLayout.setVisibility(View.GONE);
+                } else {
+                    binding.adminControlsLayout.setVisibility(View.GONE);
+                    binding.userContentLayout.setVisibility(View.VISIBLE);
+                }
+
+            } else {
                 logout();
             }
         });
@@ -126,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         if(user == null){
             return false;
         }
-        item.setTitle(user.getUsername());
+        item.setTitle(user.getUsername() + (user.isAdmin() ? " (Admin)" : "" ));
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -222,5 +237,98 @@ public class MainActivity extends AppCompatActivity {
             Log.d("SEC_HEALTH_PAL", "Error reading value from Reps edit text.");
         }
 
+    }
+    private void handleAddUser() {
+
+            // Inflate the dialog layout
+            android.view.LayoutInflater inflater = android.view.LayoutInflater.from(this);
+            View dialogView = inflater.inflate(R.layout.add_user, null);
+
+            // Get references to the EditTexts in the dialog
+            android.widget.EditText usernameEditText = dialogView.findViewById(R.id.dialogUsernameEditText);
+            android.widget.EditText passwordEditText = dialogView.findViewById(R.id.dialogPasswordEditText);
+
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Add New User")
+                    .setView(dialogView)
+                    .setPositiveButton("Create", (dialog, which) -> {
+                        String username = usernameEditText.getText().toString().trim();
+                        String password = passwordEditText.getText().toString().trim();
+
+                        if (username.isEmpty() || password.isEmpty()) {
+                            android.widget.Toast.makeText(this, "Username and password required", android.widget.Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // Optional: protect admin1 so it stays special
+                        if (username.equals("admin1")) {
+                            android.widget.Toast.makeText(this, "Username 'admin1' is reserved.", android.widget.Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        com.example.cst338_project02_andriodstudio.database.entities.User newUser =
+                                new com.example.cst338_project02_andriodstudio.database.entities.User(username, password);
+
+                        // Insert through your repository (same pattern as LoginActivity createAccount)
+                        repository.insertUser(newUser);
+
+                        android.widget.Toast.makeText(this, "User created!", android.widget.Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+    }
+    private void handleRemoveUser(){
+            LiveData<java.util.List<com.example.cst338_project02_andriodstudio.database.entities.User>> usersLive =
+                    repository.getAllUsersLive();
+
+            usersLive.observe(this, users -> {
+                // Stop listening after first result to avoid repeated dialogs
+                usersLive.removeObservers(this);
+
+                if (users == null || users.isEmpty()) {
+                    android.widget.Toast.makeText(this, "No users to delete", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Optional: filter out the main admin so they can't be deleted
+                java.util.List<com.example.cst338_project02_andriodstudio.database.entities.User> filtered =
+                        new java.util.ArrayList<>();
+                for (com.example.cst338_project02_andriodstudio.database.entities.User u : users) {
+                    if (u.getUsername().equals("admin1")) {
+                        continue; // don't allow deleting the main admin account
+                    }
+                    filtered.add(u);
+                }
+
+                if (filtered.isEmpty()) {
+                    android.widget.Toast.makeText(this, "No deletable users", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Build list of usernames for the dialog
+                String[] usernames = new String[filtered.size()];
+                for (int i = 0; i < filtered.size(); i++) {
+                    usernames[i] = filtered.get(i).getUsername();
+                }
+
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Select user to delete")
+                        .setItems(usernames, (dialog, which) -> {
+                            com.example.cst338_project02_andriodstudio.database.entities.User selected = filtered.get(which);
+
+                            // Optional: don’t let logged-in user delete themselves
+                            if (selected.getId() == loggedInUserId) {
+                                android.widget.Toast.makeText(this, "You can't delete the logged-in user.", android.widget.Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            repository.deleteUser(selected);
+                            android.widget.Toast.makeText(this, "Deleted " + selected.getUsername(), android.widget.Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+    }
+    private void handleViewUserLogs() {
     }
 }

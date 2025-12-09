@@ -43,6 +43,11 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
+            if (username.equals("admin1")) {
+                Toast.makeText(this, "Username 'admin1' is reserved.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             User newUser = new User(username, password);
             repository.insertUser(newUser);
             Toast.makeText(this, "Account created! You can now log in.", Toast.LENGTH_SHORT).show();
@@ -68,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                 binding.userNameLoginEditText.setSelection(0);
                 return;
             }
+            android.util.Log.d("LOGIN_DEBUG",
+                    "User: " + user.getUsername() + ", isAdmin=" + user.isAdmin());
+
 
             String password = binding.passwordLoginEditText.getText().toString();
             if (password.equals(user.getPassword())) {
@@ -75,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                         .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
                 sp.edit().putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, user.getId()).apply();
 
-                startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 finish();
             } else {
                 ToastMaker("Invalid password");

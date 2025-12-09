@@ -15,102 +15,137 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:text="Hello World!"
-            android:id="@+id/logDisplayTextView"
-            android:layout_width="390dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="8dp"/>
-
-        <TextView
-            android:layout_width="300dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_horizontal"
-            android:text="What is your Weight Goal?"
-            app:layout_constraintTop_toBottomOf="@+id/logDisplayTextView"
-            android:id="@+id/weightLabelTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textSize="24sp"/>
-
-        <EditText
-            android:id="@+id/weightInputEditText"
-            android:layout_width="300dp"
+        <LinearLayout
+            android:id="@+id/userContentLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:hint="@string/enter_weight_goal"
-            android:inputType="textAutoComplete"
-            android:padding="8dp"
+            android:orientation="vertical">
 
-            app:layout_constraintStart_toEndOf="@+id/weightLabelTextView"
-            app:layout_constraintTop_toBottomOf="@id/logDisplayTextView" />
+            <TextView
+                android:text="Hello World!"
+                android:id="@+id/logDisplayTextView"
+                android:layout_width="390dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="16dip"
+                android:padding="8dp" />
 
-        <TextView
-            android:layout_width="300dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="16dip"
-            android:layout_marginTop="8dp"
-            android:text="@string/activity"
-            android:id="@+id/activityLabelTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="24sp"
-            app:layout_constraintTop_toBottomOf="@+id/weightLabelTextView" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_horizontal"
+                android:text="Lets Get Started!"
+                android:id="@+id/welcomeTitleTextView"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="40dp"
+                android:textSize="30sp"
+                />
 
-        <EditText
-            android:id="@+id/activityInputEditText"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:hint="@string/enter_activity_level"
-            android:inputType="number|numberDecimal"
-            android:padding="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/activityLabelTextView"
-            app:layout_constraintStart_toEndOf="@+id/activityLabelTextView" />
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal"
+                android:text="What is your Weight Goal?"
+                android:id="@+id/weightLabelTextView"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textSize="24sp" />
 
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="16dip"
-            android:layout_marginTop="8dp"
-            android:text="@string/height"
-            android:id="@+id/heightLabelTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="24sp"
-            app:layout_constraintTop_toBottomOf="@+id/activityLabelTextView" />
+            <EditText
+                android:id="@+id/weightInputEditText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/enter_weight_goal"
+                android:inputType="textAutoComplete"
+                android:padding="8dp" />
 
-        <EditText
-            android:id="@+id/heightInputEditText"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:inputType="number"
-            android:padding="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/heightLabelTextView"
-            app:layout_constraintStart_toEndOf="@+id/heightLabelTextView"
-            android:hint="@string/enter_height"/>
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dip"
+                android:layout_marginTop="8dp"
+                android:text="@string/activity"
+                android:id="@+id/activityLabelTextView"
+                android:textSize="24sp" />
 
-        <Button
-            android:layout_width="250dp"
-            android:layout_height="85dip"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/heightInputEditText"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:text="@string/log"
-            android:textSize="36sp"
-            android:id="@+id/logButton" />
+            <EditText
+                android:id="@+id/activityInputEditText"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:hint="@string/enter_activity_level"
+                android:inputType="number|numberDecimal"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dip"
+                android:layout_marginTop="8dp"
+                android:text="@string/height"
+                android:id="@+id/heightLabelTextView"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/heightInputEditText"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:padding="8dp"
+                android:hint="@string/enter_height"/>
+
+            <Button
+                android:layout_width="250dp"
+                android:layout_height="85dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="@string/log"
+                android:textSize="36sp"
+                android:id="@+id/logButton" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/adminControlsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/adminLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Options"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="24sp" />
+
+
+            <Button
+                android:id="@+id/addUserButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add User" />
+
+            <Button
+                android:id="@+id/removeUserButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remove User" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/logoutButton"
@@ -119,7 +154,8 @@
             android:text="@string/logout"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:onClick="onLogoutClick" />
+            android:onClick="onLogoutClick"/>
 
     </LinearLayout>
+
 </ScrollView>

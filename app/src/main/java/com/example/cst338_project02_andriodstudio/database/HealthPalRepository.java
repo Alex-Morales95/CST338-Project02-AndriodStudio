@@ -92,5 +92,13 @@ public class HealthPalRepository {
         }
         return null;
     }
+    public LiveData<List<User>> getAllUsersLive() {
+        return userDAO.getAllUsers();
+    }
+    public void deleteUser(User user) {
+        HealthPalDatabase.databaseWriteExecutor.execute(() -> {
+            userDAO.delete(user);
+        });
+    }
 }
 

@@ -7,10 +7,12 @@
     <string name="height">height</string>
     <string name="log">Submit</string>
     <string name="nothing_to_show_time_to_hit_the_gym">Nothing to show, time to put that work in!</string>
-    <string name="login_welcome">Welcome to HealthPal! \nPlease sign in.</string>
+    <string name="login_welcome">Welcome to HealthPal! \nPlease sign in</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login!</string>
     <string name="logout">Logout</string>
     <string name="create_an_account">Create an account</string>
+    <string name="manage_inventory">Manage Inventory</string>
+    <string name="admin_dashboard">Admin Dashboard.</string>
 </resources>
