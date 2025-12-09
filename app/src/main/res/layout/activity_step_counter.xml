@@ -20,6 +20,7 @@
         />
 
     <RelativeLayout
+        android:id="@+id/centerContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -65,8 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back to Main"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"/>
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="80dp"/>
+
+
 
     </RelativeLayout>
 
