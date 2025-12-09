@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding = com.example.cst338_project02_andriodstudio.databinding.ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+//-----------
         binding.stepCounterButton.setOnClickListener(v ->{
             Intent intent = new Intent(MainActivity.this, StepCounterActivity.class);
             startActivity(intent);
         });
-
+//------------
         repository = HealthPalRepository.getRepository(getApplication());
         loginUser(savedInstanceState);
 
