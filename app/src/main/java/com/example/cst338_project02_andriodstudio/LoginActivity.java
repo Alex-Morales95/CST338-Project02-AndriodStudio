@@ -52,31 +52,68 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void verifyUser(){
-        String username = binding.userNameLoginEditText.getText().toString();
-        if(username.isEmpty()){
+    private void verifyUser() {
+        String username = binding.userNameLoginEditText.getText().toString().trim();
+        if (username.isEmpty()) {
             ToastMaker("Username should not be blank");
             return;
         }
-        LiveData<User> userObserver = repository.getUserByUserName(username);
-        userObserver.observe(this, user -> {
-            if(user != null){
-                String password = binding.passwordLoginEditText.getText().toString();
-                if (password.equals(user.getPassword())) {
-                    SharedPreferences sp = getApplicationContext()
-                            .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
-                    sp.edit().putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, user.getId()).apply();
 
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
-                    finish();
-                }else{
-                    ToastMaker("Invalid password");
-                    binding.passwordLoginEditText.setSelection(0);
-                }
-            }else{
-                ToastMaker(String.format("%s is not a valid username", username));
+        LiveData<User> live = repository.getUserByUserName(username);
+        live.observe(this, user -> {
+            live.removeObservers(this);
+
+            if (user == null) {
+                ToastMaker(username + " is not a valid username");
                 binding.userNameLoginEditText.setSelection(0);
+                return;
             }
+
+            String password = binding.passwordLoginEditText.getText().toString();
+            if (!password.equals(user.getPassword())) {
+                ToastMaker("Invalid password");
+                binding.passwordLoginEditText.setSelection(0);
+                return;
+            }
+
+            int userId = user.getId();
+
+            SharedPreferences sp = getApplicationContext()
+                    .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, MODE_PRIVATE);
+            sp.edit()
+                    .putInt(MainActivity.SHARED_PREFERENCE_USERID_VALUE, userId)
+                    .apply();
+
+            SharedPreferences goalPrefs = getApplicationContext()
+                    .getSharedPreferences("GOALS_PREFS", MODE_PRIVATE);
+
+            String prefix = "USER_" + userId + "_";
+            boolean hasGoal = goalPrefs.contains(prefix + "CAL_GOAL");
+
+            if (hasGoal) {
+                float calGoal     = goalPrefs.getFloat(prefix + "CAL_GOAL", 0f);
+                float proteinGoal = goalPrefs.getFloat(prefix + "PROTEIN_GOAL", 0f);
+                float carbsGoal   = goalPrefs.getFloat(prefix + "CARBS_GOAL", 0f);
+                float fatGoal     = goalPrefs.getFloat(prefix + "FAT_GOAL", 0f);
+
+                Intent trackingIntent = TrackingActivity.trackingIntentFactory(
+                        getApplicationContext(),
+                        userId,
+                        calGoal,
+                        proteinGoal,
+                        carbsGoal,
+                        fatGoal
+                );
+                startActivity(trackingIntent);
+            } else {
+                Intent mainIntent = MainActivity.mainActivityIntentFactory(
+                        getApplicationContext(),
+                        userId
+                );
+                startActivity(mainIntent);
+            }
+
+            finish();
         });
     }
 

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         repository = HealthPalRepository.getRepository(getApplication());
         loginUser(savedInstanceState);
 
-        if(loggedInUserId == -1){
+        if (loggedInUserId == -1) {
             Intent i = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(i);
             finish();
@@ -58,14 +59,41 @@ public class MainActivity extends AppCompatActivity {
 
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
+        binding.logButton.setOnClickListener(v -> {
+            String activityLevelText = binding.activityInputEditText.getText().toString().trim();
+            String goalText = binding.weightInputEditText.getText().toString().trim();
+            String heightText = binding.heightInputEditText.getText().toString().trim();
+            String weightNumberText = binding.currentWeightInputEditText.getText().toString().trim();
 
-        binding.logButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getInformationFromDisplay();
-                insertHealthPalRecord();
+            int height;
+            double weight;
+            height = Integer.parseInt(heightText);
+            weight = Double.parseDouble(weightNumberText);
 
-            }
+
+            DailyGoals goals = calculateDailyGoals(activityLevelText, goalText, weight, height);
+
+            SharedPreferences goalPrefs = getApplicationContext()
+                    .getSharedPreferences("GOALS_PREFS", MODE_PRIVATE);
+
+            String prefix = "USER_" + loggedInUserId + "_";
+
+            goalPrefs.edit()
+                    .putFloat(prefix + "CAL_GOAL", (float) goals.caloriesGoal)
+                    .putFloat(prefix + "PROTEIN_GOAL", (float) goals.proteinGoal)
+                    .putFloat(prefix + "CARBS_GOAL", (float) goals.carbsGoal)
+                    .putFloat(prefix + "FAT_GOAL", (float) goals.fatGoal)
+                    .apply();
+
+            Intent intent = TrackingActivity.trackingIntentFactory(
+                    MainActivity.this,
+                    loggedInUserId,
+                    goals.caloriesGoal,
+                    goals.proteinGoal,
+                    goals.carbsGoal,
+                    goals.fatGoal
+            );
+            startActivity(intent);
         });
 
         binding.weightInputEditText.setOnClickListener(new View.OnClickListener() {
@@ -79,24 +107,24 @@ public class MainActivity extends AppCompatActivity {
     private void loginUser(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY,
                 Context.MODE_PRIVATE);
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)){
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT){
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT){
+        if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
         userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null){
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            }else{
+            } else {
                 logout();
             }
         });
@@ -113,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.logout_menu, menu);
         return true;
@@ -123,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null){
+        if (user == null) {
             return false;
         }
         item.setTitle(user.getUsername());
@@ -137,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showLogoutDialog(){
+    private void showLogoutDialog() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
         final AlertDialog alertDialog = alertBuilder.create();
 
@@ -180,19 +208,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    static Intent mainActivityIntentFactory(Context context, int userId){
+    static Intent mainActivityIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
-    private void insertHealthPalRecord(){
-        if(mExercise.isEmpty()){
+    private void insertHealthPalRecord() {
+        if (mExercise.isEmpty()) {
             return;
         }
-        HealthPal log = new HealthPal(mExercise,mActivity,mHeight,loggedInUserId);
+        HealthPal log = new HealthPal(mExercise, mActivity, mHeight, loggedInUserId);
         repository.insertHealthPal(log);
     }
+
     private void observeUserLogs() {
         repository.getAllLogsByUserIdLive(loggedInUserId).observe(this, logs -> {
             if (logs == null || logs.isEmpty()) {
@@ -207,20 +236,92 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getInformationFromDisplay(){
+    private void getInformationFromDisplay() {
         mExercise = binding.weightInputEditText.getText().toString();
         try {
             mActivity = Double.parseDouble(binding.activityInputEditText.getText().toString());
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Log.d("SEC_HEALTH_PAL", "Error reading value from Weight edit text.");
         }
 
         //mHeight = binding.repInputEditText.getText().toString();
         try {
             mHeight = Integer.parseInt(binding.heightInputEditText.getText().toString());
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Log.d("SEC_HEALTH_PAL", "Error reading value from Reps edit text.");
         }
 
+    }
+
+    private static class DailyGoals {
+        double caloriesGoal;
+        double proteinGoal;
+        double carbsGoal;
+        double fatGoal;
+
+        DailyGoals(double caloriesGoal, double proteinGoal, double carbsGoal, double fatGoal) {
+            this.caloriesGoal = caloriesGoal;
+            this.proteinGoal = proteinGoal;
+            this.carbsGoal = carbsGoal;
+            this.fatGoal = fatGoal;
+        }
+    }
+
+    private DailyGoals calculateDailyGoals(String activityLevelText,
+                                           String goalText,
+                                           double weight,
+                                           int height) {
+
+        double weightKg = weight * 0.453592;
+        double heightCm = height * 2.54;
+
+        int age = 30;
+
+        double bmr = 10.0 * weightKg + 6.25 * heightCm - 5.0 * age - 78.0;
+
+        double activityMultiplier;
+        String level = activityLevelText.toLowerCase();
+
+        if (level.equals("low")) {
+            activityMultiplier = 1.2;
+        } else if (level.equals("average")) {
+            activityMultiplier = 1.5;
+        } else if (level.equals("high")) {
+            activityMultiplier = 1.75;
+        } else {
+            activityMultiplier = 1.2;
+        }
+
+        double maintenanceCalories = bmr * activityMultiplier;
+
+        double caloriesGoal;
+        String goal = goalText.toLowerCase();
+
+        if (goal.equals("lose")) {
+            caloriesGoal = maintenanceCalories - 500.0;
+        } else if (goal.equals("gain")) {
+            caloriesGoal = maintenanceCalories + 300.0;
+        } else {
+            caloriesGoal = maintenanceCalories;
+        }
+
+        double proteinGoalGrams = 0.8 * weight;
+        double fatGoalGrams = 0.4 * weight;
+
+        double caloriesFromProtein = proteinGoalGrams * 4.0;
+        double caloriesFromFat = fatGoalGrams * 9.0;
+
+        double caloriesForCarbs = caloriesGoal - (caloriesFromProtein + caloriesFromFat);
+        if (caloriesForCarbs < 0) {
+            caloriesForCarbs = 0;
+        }
+        double carbsGoalGrams = caloriesForCarbs / 4.0;
+
+        double roundedCalories = Math.round(caloriesGoal);
+        double roundedProtein = Math.round(proteinGoalGrams);
+        double roundedCarbs = Math.round(carbsGoalGrams);
+        double roundedFat = Math.round(fatGoalGrams);
+
+        return new DailyGoals(roundedCalories, roundedProtein, roundedCarbs, roundedFat);
     }
 }

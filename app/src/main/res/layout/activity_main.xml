@@ -16,7 +16,6 @@
         android:padding="16dp">
 
         <TextView
-            android:text="Hello World!"
             android:id="@+id/logDisplayTextView"
             android:layout_width="390dp"
             android:layout_height="100dp"
@@ -30,7 +29,7 @@
             android:layout_width="300dp"
             android:layout_height="36dp"
             android:layout_gravity="center_horizontal"
-            android:text="What is your Weight Goal?"
+            android:text="What is your weight goal?"
             app:layout_constraintTop_toBottomOf="@+id/logDisplayTextView"
             android:id="@+id/weightLabelTextView"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:hint="@string/enter_weight_goal"
+            android:hint="Lose, Maintain or Gain"
             android:inputType="textAutoComplete"
             android:padding="8dp"
 
@@ -66,26 +65,26 @@
 
         <EditText
             android:id="@+id/activityInputEditText"
-            android:layout_width="300dp"
+            android:layout_width="297dp"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
-            android:hint="@string/enter_activity_level"
-            android:inputType="number|numberDecimal"
+            android:hint="Low, Average or High"
+            android:inputType="textAutoComplete"
             android:padding="8dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/activityLabelTextView"
             app:layout_constraintStart_toEndOf="@+id/activityLabelTextView" />
 
         <TextView
-            android:layout_width="100dp"
+            android:id="@+id/heightLabelTextView"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="16dip"
             android:layout_marginTop="8dp"
-            android:text="@string/height"
-            android:id="@+id/heightLabelTextView"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="What is your height in inches?"
             android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activityLabelTextView" />
 
         <EditText
@@ -99,6 +98,30 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/heightLabelTextView"
             app:layout_constraintStart_toEndOf="@+id/heightLabelTextView"
             android:hint="@string/enter_height"/>
+
+        <TextView
+            android:id="@+id/currentWeightLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="16dip"
+            android:layout_marginTop="8dp"
+            android:text="What is your weight in pounds?"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activityLabelTextView" />
+
+        <EditText
+            android:id="@+id/currentWeightInputEditText"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:inputType="number"
+            android:padding="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/heightLabelTextView"
+            app:layout_constraintStart_toEndOf="@+id/heightLabelTextView"
+            android:hint="Enter weight"/>
 
         <Button
             android:layout_width="250dp"
@@ -114,12 +137,12 @@
 
         <Button
             android:id="@+id/logoutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"
+            android:layout_width="116dp"
+            android:layout_height="69dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:onClick="onLogoutClick" />
+            android:onClick="onLogoutClick"
+            android:text="@string/logout" />
 
     </LinearLayout>
 </ScrollView>
