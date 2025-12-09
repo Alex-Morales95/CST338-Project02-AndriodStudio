@@ -25,6 +25,7 @@ public class TrackingActivity extends AppCompatActivity {
     private double proteinGoal;
     private double carbsGoal;
     private double fatGoal;
+    private SharedPreferences goalPrefs;
 
     private double currentCalories = 0;
     private double currentProtein = 0;
@@ -53,6 +54,8 @@ public class TrackingActivity extends AppCompatActivity {
         binding = ActivityTrackingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        goalPrefs = getApplicationContext()
+                .getSharedPreferences("GOALS_PREFS", MODE_PRIVATE);
 
         Intent intent = getIntent();
         userId = intent.getIntExtra(USER_ID_KEY, -1);
@@ -60,6 +63,8 @@ public class TrackingActivity extends AppCompatActivity {
         proteinGoal = intent.getDoubleExtra(PROTEIN_GOAL_KEY, 0);
         carbsGoal = intent.getDoubleExtra(CARBS_GOAL_KEY, 0);
         fatGoal = intent.getDoubleExtra(FAT_GOAL_KEY, 0);
+
+        loadCurrentProgressFromPrefs();
 
         binding.proteinGoalTextView.setText(String.format("Goal: %.0f g", proteinGoal));
         binding.carbsGoalTextView.setText(String.format("Goal: %.0f g", carbsGoal));
@@ -75,6 +80,7 @@ public class TrackingActivity extends AppCompatActivity {
             currentProtein = 0;
             currentCarbs = 0;
             currentFat = 0;
+            saveCurrentProgressToPrefs();
             updateProgressSummary();
         });
 
@@ -127,6 +133,8 @@ public class TrackingActivity extends AppCompatActivity {
         binding.fatInputEditText.setText("");
         binding.caloriesInputEditText.setText("");
 
+        saveCurrentProgressToPrefs();
+
         updateProgressSummary();
     }
 
@@ -151,5 +159,27 @@ public class TrackingActivity extends AppCompatActivity {
                 currentFat, fatGoal
         );
         binding.progressSummaryTextView.setText(summary);
+    }
+
+    private void loadCurrentProgressFromPrefs() {
+        if (userId == -1 || goalPrefs == null) return;
+
+        String prefix = "USER_" + userId + "_";
+        currentCalories = goalPrefs.getFloat(prefix + "CURRENT_CAL", 0f);
+        currentProtein  = goalPrefs.getFloat(prefix + "CURRENT_PROTEIN", 0f);
+        currentCarbs    = goalPrefs.getFloat(prefix + "CURRENT_CARBS", 0f);
+        currentFat      = goalPrefs.getFloat(prefix + "CURRENT_FAT", 0f);
+    }
+
+    private void saveCurrentProgressToPrefs() {
+        if (userId == -1 || goalPrefs == null) return;
+
+        String prefix = "USER_" + userId + "_";
+        goalPrefs.edit()
+                .putFloat(prefix + "CURRENT_CAL", (float) currentCalories)
+                .putFloat(prefix + "CURRENT_PROTEIN", (float) currentProtein)
+                .putFloat(prefix + "CURRENT_CARBS", (float) currentCarbs)
+                .putFloat(prefix + "CURRENT_FAT", (float) currentFat)
+                .apply();
     }
 }
