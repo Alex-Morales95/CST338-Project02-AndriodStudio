@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private static class DailyGoals {
+    public static class DailyGoals {
         double caloriesGoal;
         double proteinGoal;
         double carbsGoal;
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private DailyGoals calculateDailyGoals(String activityLevelText,
+    public static DailyGoals calculateDailyGoals(String activityLevelText,
                                            String goalText,
                                            double weight,
                                            int height) {
