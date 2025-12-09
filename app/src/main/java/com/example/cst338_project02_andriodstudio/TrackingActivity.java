@@ -54,6 +54,15 @@ public class TrackingActivity extends AppCompatActivity {
         binding = ActivityTrackingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //----
+
+        binding.stepCounterButton.setOnClickListener(v ->{
+            Intent intent = new Intent(TrackingActivity.this, StepCounterActivity.class);
+            startActivity(intent);
+        });
+
+        //---
+
         goalPrefs = getApplicationContext()
                 .getSharedPreferences("GOALS_PREFS", MODE_PRIVATE);
 
@@ -95,9 +104,9 @@ public class TrackingActivity extends AppCompatActivity {
         });
 
         // TODO: WIRE STEP COUNT BUTTON
-        binding.openStepCounterButton.setOnClickListener(v -> {
+       // binding.openStepCounterButton.setOnClickListener(v -> {
 
-        });
+       // });
 
         binding.logoutButton.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getApplicationContext()
