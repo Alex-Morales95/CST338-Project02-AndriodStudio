@@ -2,6 +2,7 @@ package com.example.cst338_project02_andriodstudio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -90,6 +91,23 @@ public class TrackingActivity extends AppCompatActivity {
         // TODO: WIRE STEP COUNT BUTTON
         binding.openStepCounterButton.setOnClickListener(v -> {
 
+        });
+
+        binding.logoutButton.setOnClickListener(v -> {
+            SharedPreferences sharedPreferences = getApplicationContext()
+                    .getSharedPreferences(MainActivity.SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(MainActivity.SHARED_PREFERENCE_USERID_VALUE);
+            editor.apply();
+
+            getIntent().removeExtra(USER_ID_KEY);
+
+            Intent loginIntent = LoginActivity.loginIntentFactory(getApplicationContext());
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(loginIntent);
+            finish();
         });
     }
 

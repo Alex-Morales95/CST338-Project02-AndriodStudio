@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("SEC_HEALTH_PAL", "Error reading value from Weight edit text.");
         }
 
-        //mHeight = binding.repInputEditText.getText().toString();
+
         try {
             mHeight = Integer.parseInt(binding.heightInputEditText.getText().toString());
         } catch (NumberFormatException e) {
