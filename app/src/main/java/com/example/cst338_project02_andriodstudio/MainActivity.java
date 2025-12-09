@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             if (this.user != null) {
                 invalidateOptionsMenu();
             } else {
-                logout();
+                //logout();
             }
         });
     }
@@ -158,13 +158,13 @@ public class MainActivity extends AppCompatActivity {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
-                showLogoutDialog();
+                //loseshowLogoutDialog();
                 return false;
             }
         });
         return true;
     }
-
+/*
     private void showLogoutDialog() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
         final AlertDialog alertDialog = alertBuilder.create();
@@ -195,17 +195,7 @@ public class MainActivity extends AppCompatActivity {
         getIntent().removeExtra(MAIN_ACTIVITY_USER_ID);
 
         loggedInUserId = -1;
-        user = null;
-
-        Intent i = LoginActivity.loginIntentFactory(getApplicationContext());
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-        finish();
-    }
-
-    public void onLogoutClick(View view) {
-        logout();
-    }
+   */
 
 
     static Intent mainActivityIntentFactory(Context context, int userId) {

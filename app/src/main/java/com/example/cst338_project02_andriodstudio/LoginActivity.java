@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
             live.removeObservers(this);
 
             if (user == null) {
-                ToastMaker(username + " is not a valid username");
                 binding.userNameLoginEditText.setSelection(0);
                 return;
             }
