@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,13 @@
         android:theme="@style/Theme.CST338Project02AndriodStudio"
         tools:targetApi="31">
         <activity
+            android:name=".TrackingActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StepCounterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
