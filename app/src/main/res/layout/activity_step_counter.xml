@@ -20,6 +20,7 @@
         />
 
     <RelativeLayout
+        android:id="@+id/centerContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -49,6 +50,7 @@
             android:textStyle="bold"
             />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +60,18 @@
             android:layout_marginLeft="100dp"
             android:textSize="20dp"
             />
+
+        <Button
+            android:id="@+id/backToMainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to Main"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="80dp"/>
+
+
+
     </RelativeLayout>
 
 
