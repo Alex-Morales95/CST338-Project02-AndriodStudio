@@ -102,13 +102,19 @@ public class MainActivity extends AppCompatActivity {
         userObserver.observe(this, user -> {
             this.user = user;
             if (this.user != null) {
+
                 invalidateOptionsMenu();
                 if (this.user.isAdmin()) {
                     binding.adminControlsLayout.setVisibility(View.VISIBLE);
                     binding.userContentLayout.setVisibility(View.GONE);
+
+                    binding.usernameWelcomeTextView.setVisibility(View.GONE);
                 } else {
                     binding.adminControlsLayout.setVisibility(View.GONE);
                     binding.userContentLayout.setVisibility(View.VISIBLE);
+
+                    binding.usernameWelcomeTextView.setVisibility(View.VISIBLE);
+                    binding.usernameWelcomeTextView.setText("Lets Get Started, " + this.user.getUsername());
                 }
 
             } else {

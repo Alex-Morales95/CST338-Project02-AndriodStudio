@@ -60,8 +60,6 @@ public class HealthPal {
         return Objects.hash(id, weightGoal, activityLevel, height, date, userId);
     }
 
-    //TODO: figure out how to get these methods to work, seems like its lot fo work
-
     public int getId() {
         return id;
     }
